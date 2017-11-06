@@ -245,7 +245,11 @@
 
             if (this.dots.total === 0)
             {
-                this.dots.callAll('revive');
+                if (confirm("PLAY AGAIN?") == true) {
+                    window.location.reload();
+                } else{
+                    close();
+                }
             }
 
             const isBonus = this.dots.getChildIndex(dot) == bIntex;
