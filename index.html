@@ -22,6 +22,7 @@
     var score = 0;
     var scoreNum;
     var timeNum;
+    var lifesNum;
 
     var bIntex = -1;
 
@@ -70,6 +71,7 @@
             //this.load.crossOrigin = 'anonymous';
 
             this.load.image('dot', 'assets/ring.png');
+            this.load.image('life', 'assets/life.png');
             this.load.image('bonus', 'assets/ring_bonus.png');
             this.load.image('tiles', 'assets/pacman-tiles.png');
             this.load.spritesheet('pacman', 'assets/sonic.png', 32, 32);
@@ -115,6 +117,10 @@
             var timeText = game.add.text(460, 80, 'TIME', { font: "20px Arial", fill: "#ffff00" });
             scoreNum = game.add.text(470, 40, '0', { font: "18px Arial", fill: "#ffffff" });
             timeNum = game.add.text(470, 104, ' 0', { font: "18px Arial", fill: "#ffffff" });
+            
+            var lifePic = game.add.sprite(458, 145, 'life');
+            var lifesText = game.add.text(491, 145, 'SONIC', { font: "15px Arial", fill: "#ffff00" });
+            lifesNum = game.add.text(491, 160, 'x 3', { font: "15px Arial", fill: "#ffffff" });
 
             // Bonus
             this.eatBonus();
