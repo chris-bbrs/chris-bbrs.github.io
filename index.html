@@ -5,9 +5,12 @@
     <meta charset="utf-8">
     <style>
         body {
-            margin: 0;
-            padding: 0;
-            background-color: #000;
+            margin: 8;
+            padding: 8;
+            background-image: url("assets/sonic_runners_windy_hill_background.png");
+            background-attachment : fixed;
+            background-size : 100% auto;
+            background-position: center;
         }
     </style>
     <script src="//cdn.jsdelivr.net/phaser/2.2.2/phaser.min.js"></script>
@@ -17,7 +20,7 @@
 
     <script type="text/javascript">
 
-    var game = new Phaser.Game(550, 496, Phaser.AUTO);
+    var game = new Phaser.Game(595, 520, Phaser.AUTO);
 
     var score = 0;
     var scoreNum;
@@ -84,6 +87,8 @@
 
         create: function () {
 
+            game.stage.backgroundColor = "#156c99";
+
             this.map = this.add.tilemap('map');
             this.map.addTilesetImage('pacman-tiles', 'tiles');
 
@@ -113,14 +118,15 @@
             this.pacman.play('munch');
             this.move(Phaser.LEFT);
 
-            var scoreText = game.add.text(460, 16, 'SCORE', { font: "20px Arial", fill: "#ffff00" });
-            var timeText = game.add.text(460, 80, 'TIME', { font: "20px Arial", fill: "#ffff00" });
-            scoreNum = game.add.text(470, 40, '0', { font: "18px Arial", fill: "#ffffff" });
-            timeNum = game.add.text(470, 104, ' 0', { font: "18px Arial", fill: "#ffffff" });
-            
-            var lifePic = game.add.sprite(458, 145, 'life');
-            var lifesText = game.add.text(491, 145, 'SONIC', { font: "15px Arial", fill: "#ffff00" });
-            lifesNum = game.add.text(491, 160, 'x 3', { font: "15px Arial", fill: "#ffffff" });
+            var scoreText = game.add.text(483, 19, 'SCORE', { font: "20px Arial", fill: "#ffff00" });
+            var timeText = game.add.text(484, 80, 'TIME', { font: "20px Arial", fill: "#ffff00" });
+            scoreNum = game.add.text(493, 43, '0', { font: "18px Arial", fill: "#ffffff" });
+            timeNum = game.add.text(493, 104, ' 0', { font: "18px Arial", fill: "#ffffff" });
+
+            var lifePic = game.add.sprite(481, 145, 'life');
+            var lifesText = game.add.text(514, 145, 'SONIC', { font: "15px Arial", fill: "#ffff00" });
+            lifesNum = game.add.text(514, 160, 'x 3', { font: "15px Arial", fill: "#ffffff" });
+
 
             // Bonus
             this.eatBonus();
@@ -249,7 +255,7 @@
 
             dot.kill();
 
-            if (this.dots.total === 0)
+            if (this.dots.total === 1)
             {
                 if (confirm("PLAY AGAIN?") == true) {
                     window.location.reload();
