@@ -26,8 +26,7 @@
     var scoreNum;
     var timeNum;
     var lifesNum;
-
-    var bIntex = -1;
+    var bonusPos;
 
     var Pacman = function (game) {
 
@@ -127,8 +126,6 @@
             var lifesText = game.add.text(514, 145, 'SONIC', { font: "15px Arial", fill: "#ffff00" });
             lifesNum = game.add.text(514, 160, 'x 3', { font: "15px Arial", fill: "#ffffff" });
 
-
-            // Bonus
             this.eatBonus();
 
         },
@@ -264,9 +261,9 @@
                 }
             }
 
-            const isBonus = this.dots.getChildIndex(dot) == bIntex;
+            const bonusring = this.dots.getChildIndex(dot) == bonusPos;
 
-            if (isBonus) {
+            if (bonusring) {
                 score = score + 100;
                 this.eatBonus();
             }
@@ -280,9 +277,9 @@
 
         eatBonus: function() {
             let totalDots = this.dots.children.length;
-            bIntex = Math.floor(Math.random() * totalDots);
-            this.dots.children[bIntex].revive();
-            this.dots.children[bIntex].loadTexture('bonus');
+            bonusPos = Math.floor(Math.random() * totalDots);
+            this.dots.children[bonusPos].revive();
+            this.dots.children[bonusPos].loadTexture('bonus');
         },
 
         update: function () {
