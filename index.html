@@ -123,8 +123,8 @@
             timeNum = game.add.text(493, 104, ' 0', { font: "18px Arial", fill: "#ffffff" });
 
             var lifePic = game.add.sprite(481, 145, 'life');
-            var lifesText = game.add.text(514, 145, 'SONIC', { font: "15px Arial", fill: "#ffff00" });
-            lifesNum = game.add.text(514, 243, 'x 3', { font: "15px Arial", fill: "#ffffff" });
+            var lifesText = game.add.text(450, 145, 'SONIC', { font: "15px Arial", fill: "#ffff00" });
+            lifesNum = game.add.text(514, 150, 'x 3', { font: "15px Arial", fill: "#ffffff" });
 
             this.eatBonus();
 
@@ -296,8 +296,8 @@
                 this.marker.x = this.math.snapToFloor(Math.floor(this.pacman.x), this.gridsize) / this.gridsize;
                 this.marker.y = this.math.snapToFloor(Math.floor(this.pacman.y), this.gridsize) / this.gridsize;
                 }
-            if(Math.ceil(this.pacman.x) === 514 && this.pacman.y === 242) {
-                this.pacman.x = 60;
+            if(Math.ceil(this.pacman.x) === 450 && this.pacman.y === 145) {
+                this.pacman.x = 200;
                 this.marker.x = this.math.snapToFloor(Math.floor(this.pacman.x), this.gridsize) / this.gridsize;
                 this.marker.y = this.math.snapToFloor(Math.floor(this.pacman.y), this.gridsize) / this.gridsize;
             }
