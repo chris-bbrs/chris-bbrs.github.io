@@ -105,7 +105,7 @@
             this.map.setCollisionByExclusion([this.safetile], true, this.layer);
 
             //  Position Pacman at grid location 14x17 (the +8 accounts for his anchor)
-            this.pacman = this.add.sprite(270, 290, 'pacman', 0);
+            this.pacman = this.add.sprite((14 * 16) + 8, (17 * 16) + 8, 'pacman', 0);
             this.pacman.anchor.set(0.5);
             this.pacman.animations.add('munch', [0, 1, 2, 1], 20, true);
 
@@ -123,8 +123,8 @@
             timeNum = game.add.text(493, 104, ' 0', { font: "18px Arial", fill: "#ffffff" });
 
             var lifePic = game.add.sprite(481, 145, 'life');
-            var lifesText = game.add.text(450, 145, 'SONIC', { font: "15px Arial", fill: "#ffff00" });
-            lifesNum = game.add.text(514, 150, 'x 3', { font: "15px Arial", fill: "#ffffff" });
+            var lifesText = game.add.text(514, 145, 'SONIC', { font: "15px Arial", fill: "#ffff00" });
+            lifesNum = game.add.text(514, 160, 'x 3', { font: "15px Arial", fill: "#ffffff" });
 
             this.eatBonus();
 
@@ -290,17 +290,6 @@
 
             this.marker.x = this.math.snapToFloor(Math.floor(this.pacman.x), this.gridsize) / this.gridsize;
             this.marker.y = this.math.snapToFloor(Math.floor(this.pacman.y), this.gridsize) / this.gridsize;
-            
-            if(Math.ceil(this.pacman.x) === 232 && this.pacman.y === 280) {
-                this.pacman.x = 450;
-                this.marker.x = this.math.snapToFloor(Math.floor(this.pacman.x), this.gridsize) / this.gridsize;
-                this.marker.y = this.math.snapToFloor(Math.floor(this.pacman.y), this.gridsize) / this.gridsize;
-                }
-            if(Math.ceil(this.pacman.x) === 450 && this.pacman.y === 145) {
-                this.pacman.x = 200;
-                this.marker.x = this.math.snapToFloor(Math.floor(this.pacman.x), this.gridsize) / this.gridsize;
-                this.marker.y = this.math.snapToFloor(Math.floor(this.pacman.y), this.gridsize) / this.gridsize;
-            }
 
             //  Update our grid sensors
             this.directions[1] = this.map.getTileLeft(this.layer.index, this.marker.x, this.marker.y);
