@@ -27,6 +27,8 @@
     var timeNum;
     var lifesNum;
     var bonusPos;
+    var enemySpeed = -110;
+    var enemy2Speed = 130;
 
     var Pacman = function (game) {
 
@@ -36,6 +38,8 @@
 
         this.tp1 = 1415;
         this.tp2 = 1419;
+
+        this.enemy = null;
 
         this.safetile = 1868;
         this.gridsize = 16;
@@ -80,6 +84,8 @@
             this.load.image('bonus', 'assets/ring_bonus.png');
             this.load.image('teleport', 'assets/tp.png');
             this.load.image('tiles', 'assets/pacman-tiles.png');
+            this.load.spritesheet('enemy', 'assets/enemy.png', 32, 32);
+            this.load.spritesheet('enemy2', 'assets/enemy2.png', 32, 32);
             this.load.spritesheet('pacman', 'assets/sonic.png', 32, 32);
             this.load.tilemap('map', 'assets/pacman-map.json', null, Phaser.Tilemap.TILED_JSON);
 
@@ -101,6 +107,7 @@
 
             this.map.createFromTiles(1806, this.safetile, 'dot', this.layer, this.dots);
 
+            //teleport
             this.tp1 = this.add.physicsGroup();
             this.tp2 = this.add.physicsGroup();
             this.map.createFromTiles(1808, this.safetile, 'teleport', this.layer, this.tp1);
@@ -121,8 +128,23 @@
             this.physics.arcade.enable(this.pacman);
             this.pacman.body.setSize(16, 16, 0, 0);
 
+            //enemy1
+            this.enemy = this.add.sprite((15 * 16) + 8, (12 * 16) + 8, 'enemy', 0);
+            this.enemy.anchor.set(0.5);
+            this.enemy.animations.add('munch', [0, 1, 2, 1], 20, true);
+            this.physics.arcade.enable(this.enemy);
+            this.enemy.body.setSize(16, 16, 0, 0);
+            //enemy2
+            this.enemy2 = this.add.sprite((16 * 16) + 8, (12 * 16) + 8, 'enemy2', 0);
+            this.enemy2.anchor.set(0.5);
+            this.enemy2.animations.add('munch', [0, 1, 2, 1], 20, true);
+            this.physics.arcade.enable(this.enemy2);
+            this.enemy2.body.setSize(16, 16, 0, 0);
+
             this.cursors = this.input.keyboard.createCursorKeys();
 
+            this.enemy.play('munch');
+            this.enemy2.play('munch');
             this.pacman.play('munch');
             this.move(Phaser.LEFT);
 
@@ -292,30 +314,90 @@
         },
 
         Left2Right: function() {
-        		this.pacman.destroy();
-        		this.pacman = this.add.sprite((34 * 16) + 8, (15 * 16) + 8, 'pacman', 0);
-        		this.pacman.anchor.set(0.5);
-        		this.pacman.animations.add('munch', [0, 1, 2, 1], 20, true);
-        		this.physics.arcade.enable(this.pacman);
-        		this.pacman.body.setSize(16, 16, 0, 0);
-        		this.pacman.play('munch');
-        		this.move(Phaser.LEFT);
+    		this.pacman.destroy();
+    		this.pacman = this.add.sprite((34 * 16) + 8, (15 * 16) + 8, 'pacman', 0);
+    		this.pacman.anchor.set(0.5);
+    		this.pacman.animations.add('munch', [0, 1, 2, 1], 20, true);
+    		this.physics.arcade.enable(this.pacman);
+    		this.pacman.body.setSize(16, 16, 0, 0);
+    		this.pacman.play('munch');
+    		this.move(Phaser.LEFT);
         	},
 
-        	// function that teleports Pacman from right-gate to left-gate
-        	Right2Left: function() {
-        		this.pacman.destroy();
-        		this.pacman = this.add.sprite((2 * 16) + 8, (15 * 16) + 8, 'pacman', 0);
-        		this.pacman.anchor.set(0.5);
-        		this.pacman.animations.add('munch', [0, 1, 2, 1], 20, true);
-        		this.physics.arcade.enable(this.pacman);
-        		this.pacman.body.setSize(16, 16, 0, 0);
-        		this.pacman.play('munch');
-        		this.move(Phaser.RIGHT);
-        	},
+    	Right2Left: function() {
+    		this.pacman.destroy();
+    		this.pacman = this.add.sprite((2 * 16) + 8, (15 * 16) + 8, 'pacman', 0);
+    		this.pacman.anchor.set(0.5);
+    		this.pacman.animations.add('munch', [0, 1, 2, 1], 20, true);
+    		this.physics.arcade.enable(this.pacman);
+    		this.pacman.body.setSize(16, 16, 0, 0);
+    		this.pacman.play('munch');
+    		this.move(Phaser.RIGHT);
+    	},
 
         update: function () {
             timeNum.text = Math.floor(this.game.time.totalElapsedSeconds());
+
+            //enemy1
+            this.enemy.scale.x = -1;
+            if(this.enemy.angle == 0)
+            {
+            	this.enemy.body.velocity.x = enemySpeed;
+            }
+            if(this.enemy.angle == -180)
+            {
+            	this.enemy.body.velocity.x = -enemySpeed;
+            }
+            if(this.enemy.angle == 90)
+            {
+            	this.enemy.body.velocity.y = enemySpeed;
+            }
+            if(this.enemy.angle == -90)
+            {
+            	this.enemy.body.velocity.y = -enemySpeed;
+            }
+            if(this.physics.arcade.collide(this.enemy, this.layer))
+            {
+            	randomVar = Math.floor((Math.random() * 2) + 1);
+            	if(randomVar == 1)
+            	{
+            		this.enemy.angle = this.enemy.angle + 90;
+            	}
+            	else
+            	{
+            			this.enemy.angle = this.enemy.angle - 90;
+            	}
+            }
+            //enemy2
+            this.enemy2.scale.x = 1;
+        	if(this.enemy2.angle == 0)
+        	{
+        		this.enemy2.body.velocity.x = enemy2Speed;
+        	}
+        	if(this.enemy2.angle == -180)
+        	{
+        		this.enemy2.body.velocity.x = -enemy2Speed;
+        	}
+        	if(this.enemy2.angle == 90)
+        	{
+        		this.enemy2.body.velocity.y = enemy2Speed;
+        	}
+        	if(this.enemy2.angle == -90)
+        	{
+        		this.enemy2.body.velocity.y = -enemy2Speed;
+        	}
+        	if(this.physics.arcade.collide(this.enemy2, this.layer))
+        	{
+        		randomVar = Math.floor((Math.random() * 2) + 1);
+        		if(randomVar == 1)
+        		{
+        			this.enemy2.angle = this.enemy2.angle + 90;
+        		}
+        		else
+        		{
+        			this.enemy2.angle = this.enemy2.angle - 90;
+        		}
+        	}
 
             this.physics.arcade.collide(this.pacman, this.layer);
             this.physics.arcade.overlap(this.pacman, this.dots, this.eatDot, null, this);
