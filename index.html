@@ -22,6 +22,7 @@
 
     var game = new Phaser.Game(595, 520, Phaser.AUTO);
 
+    var s = 0;
     var score = 0;
     var scoreNum;
     var timeNum;
@@ -156,8 +157,8 @@
 
             var lifePic = game.add.sprite(481, 145, 'life');
             var lifesText = game.add.text(514, 145, 'SONIC', { font: "15px Arial", fill: "#ffff00" });
-            var lifesText2 = game.add.text(514, 160, 'x', { font: "15px Arial", fill: "#ffffff" });
-            lifesNum = game.add.text(525, 160, '3', { font: "15px Arial", fill: "#ffffff" });
+            var lifesText2 = game.add.text(519, 158, 'x', { font: "15px Arial", fill: "#ffffff" });
+            lifesNum = game.add.text(530, 158, '3', { font: "15px Arial", fill: "#ffffff" });
 
             this.eatBonus();
 
@@ -364,7 +365,10 @@
 	                enemy2Speed = 110;
 	            }
 	            else {
- 					this.restart();
+	            	if ( s == 0 ) {
+	 					this.restart();
+	 					s++;
+	 				}
 	            }
 	        }
 
