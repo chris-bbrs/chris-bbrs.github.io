@@ -22,13 +22,15 @@
 
     var game = new Phaser.Game(595, 520, Phaser.AUTO);
 
+    var s = 0;
     var score = 0;
     var scoreNum;
     var timeNum;
+    var lifes = 3;
     var lifesNum;
     var bonusPos;
-    var enemySpeed = -110;
-    var enemy2Speed = 130;
+    var enemySpeed = -90;
+    var enemy2Speed = 110;
 
     var Pacman = function (game) {
 
@@ -151,11 +153,12 @@
             var scoreText = game.add.text(483, 19, 'SCORE', { font: "20px Arial", fill: "#ffff00" });
             var timeText = game.add.text(484, 80, 'TIME', { font: "20px Arial", fill: "#ffff00" });
             scoreNum = game.add.text(493, 43, '0', { font: "18px Arial", fill: "#ffffff" });
-            timeNum = game.add.text(493, 104, ' 0', { font: "18px Arial", fill: "#ffffff" });
+            timeNum = game.add.text(492, 104, ' 0', { font: "18px Arial", fill: "#ffffff" });
 
             var lifePic = game.add.sprite(481, 145, 'life');
             var lifesText = game.add.text(514, 145, 'SONIC', { font: "15px Arial", fill: "#ffff00" });
-            lifesNum = game.add.text(514, 160, 'x 3', { font: "15px Arial", fill: "#ffffff" });
+            var lifesText2 = game.add.text(519, 158, 'x', { font: "15px Arial", fill: "#ffffff" });
+            lifesNum = game.add.text(530, 158, '3', { font: "15px Arial", fill: "#ffffff" });
 
             this.eatBonus();
 
@@ -275,6 +278,14 @@
 
         },
 
+        restart: function () {
+        	if (confirm("PLAY AGAIN?") == true) {
+        	    window.location.reload();
+        	} else{
+        	    close();
+        	}
+        },
+
         eatDot: function (pacman, dot) {
 
             var audio = new Audio('assets/SonicRingSoundEffect.mp3');
@@ -285,11 +296,7 @@
 
             if (this.dots.total === 1)
             {
-                if (confirm("PLAY AGAIN?") == true) {
-                    window.location.reload();
-                } else{
-                    close();
-                }
+                this.restart();
             }
 
             const bonusring = this.dots.getChildIndex(dot) == bonusPos;
@@ -337,6 +344,33 @@
 
         update: function () {
             timeNum.text = Math.floor(this.game.time.totalElapsedSeconds());
+
+            //enemy2collision
+            if (this.physics.arcade.collide(this.pacman, this.enemy) || this.physics.arcade.collide(this.pacman, this.enemy2)) {
+	    		if(lifes > 1)
+	            {
+	                lifes = lifes - 1;
+	                lifesNum.text = lifes;
+
+	                this.pacman.position.x = (14 * 16) + 8;
+	                this.pacman.position.y = (18 * 16) + 8;
+	        		this.move(Phaser.LEFT);
+	        		//enemy1
+	        		this.enemy.position.x = (15 * 16) + 8;
+	                this.enemy.position.y = (12 * 16) + 8;
+	                enemySpeed = -90;
+	                //enemy2
+	                this.enemy2.position.x = (16 * 16) + 8;
+	                this.enemy2.position.y = (12 * 16) + 8;
+	                enemy2Speed = 110;
+	            }
+	            else {
+	            	if ( s == 0 ) {
+	 					this.restart();
+	 					s++;
+	 				}
+	            }
+	        }
 
             //enemy1
             this.enemy.scale.x = -1;
