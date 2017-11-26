@@ -26,6 +26,7 @@
     var score = 0;
     var scoreNum;
     var timeNum;
+    var powerUp_time = 0;
     var lifes = 3;
     var lifesNum;
     var bonusPos;
@@ -331,8 +332,15 @@
         },
 
         eatPowerup: function (pacman, power_up) {
+            var powerUp_audio = new Audio('assets/Sonic-PowerUp.mp3');
+            powerUp_audio.volume = 0.5;
+            if ( powerUp_time < parseInt(timeNum.text) ) {
+            	powerUp_audio.play();
+            	powerUp_time = parseInt(timeNum.text) + 5;
+            }
+
             power_up.kill();
-            // music.play();
+
             score += 200;
             scoreNum.text = score;
 
