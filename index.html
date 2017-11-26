@@ -26,12 +26,14 @@
     var score = 0;
     var scoreNum;
     var timeNum;
-    var powerUp_time = 0;
+    var powerUp_time = -3.5;
     var lifes = 3;
     var lifesNum;
     var bonusPos;
     var enemySpeed = -90;
     var enemy2Speed = 110;
+	var enemyCollide;
+	var enemy2Collide;
 
     var Pacman = function (game) {
 
@@ -340,10 +342,6 @@
             }
 
             power_up.kill();
-
-            score += 200;
-            scoreNum.text = score;
-
         },
 
         Left2Right: function() {
@@ -371,32 +369,61 @@
         update: function () {
             timeNum.text = Math.floor(this.game.time.totalElapsedSeconds());
 
-            //enemy2collision
-            if (this.physics.arcade.collide(this.pacman, this.enemy) || this.physics.arcade.collide(this.pacman, this.enemy2)) {
-	    		if(lifes > 1)
-	            {
-	                lifes = lifes - 1;
-	                lifesNum.text = lifes;
+			this.physics.arcade.overlap(this.pacman, this.power_ups, this.eatPowerup, null, this);
+			//enemycollision
+			if (this.physics.arcade.collide(this.pacman, this.enemy) ) {
+				enemyCollide = true;
+			}else {
+				enemyCollide = false;
+			}
+			if (this.physics.arcade.collide(this.pacman, this.enemy2) ) {
+				enemy2Collide = true;
+			}else {
+				enemy2Collide = false;
+			}
+			if ( enemyCollide || enemy2Collide ) {
+				if ( powerUp_time + 3.5 < parseInt(timeNum.text) ) {
+					if(lifes > 1) {
+			            lifes = lifes - 1;
+			            lifesNum.text = lifes;
 
-	                this.pacman.position.x = (14 * 16) + 8;
-	                this.pacman.position.y = (18 * 16) + 8;
-	        		this.move(Phaser.LEFT);
-	        		//enemy1
-	        		this.enemy.position.x = (15 * 16) + 8;
-	                this.enemy.position.y = (12 * 16) + 8;
-	                enemySpeed = -90;
-	                //enemy2
-	                this.enemy2.position.x = (16 * 16) + 8;
-	                this.enemy2.position.y = (12 * 16) + 8;
-	                enemy2Speed = 110;
-	            }
-	            else {
-	            	if ( s == 0 ) {
-	 					this.restart();
-	 					s++;
-	 				}
-	            }
-	        }
+			            this.pacman.position.x = (14 * 16) + 8;
+			            this.pacman.position.y = (18 * 16) + 8;
+			    		this.move(Phaser.LEFT);
+			    		//enemy1
+			    		this.enemy.position.x = (15 * 16) + 8;
+			            this.enemy.position.y = (12 * 16) + 8;
+			            enemySpeed = -90;
+			            //enemy2
+			            this.enemy2.position.x = (16 * 16) + 8;
+			            this.enemy2.position.y = (12 * 16) + 8;
+			            enemy2Speed = 110;
+			        }
+			        else {
+			        	if ( s == 0 ) {
+								this.restart();
+								s++;
+							}
+			        }
+				}
+				else {
+					score += 200;
+					scoreNum.text = score;
+
+					//enemy1
+					if( enemyCollide ) {
+					this.enemy.position.x = (15 * 16) + 8;
+			        this.enemy.position.y = (12 * 16) + 8;
+			        this.move(this.current);
+			    	}
+			        //enemy2
+			    	if ( enemy2Collide ) {
+			        this.enemy2.position.x = (16 * 16) + 8;
+			        this.enemy2.position.y = (12 * 16) + 8;
+			        this.move(this.current);
+			    	}
+			    }
+			}
 
             //enemy1
             this.enemy.scale.x = -1;
@@ -461,8 +488,6 @@
 
             this.physics.arcade.collide(this.pacman, this.layer);
             this.physics.arcade.overlap(this.pacman, this.dots, this.eatDot, null, this);
-            this.physics.arcade.overlap(this.pacman, this.power_ups, this.eatPowerup, null, this);
-
 
             this.marker.x = this.math.snapToFloor(Math.floor(this.pacman.x), this.gridsize) / this.gridsize;
             this.marker.y = this.math.snapToFloor(Math.floor(this.pacman.y), this.gridsize) / this.gridsize;
