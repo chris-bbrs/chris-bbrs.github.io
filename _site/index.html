@@ -85,10 +85,11 @@
             this.load.image('life', 'assets/life.png');
             this.load.image('bonus', 'assets/ring_bonus.png');
             this.load.image('teleport', 'assets/tp.png');
-            this.load.image('tiles', 'assets/pacman-tiles.png');
+            this.load.image('power_up', 'assets/power_up.png');
             this.load.spritesheet('enemy', 'assets/enemy.png', 32, 32);
             this.load.spritesheet('enemy2', 'assets/enemy2.png', 32, 32);
             this.load.spritesheet('pacman', 'assets/sonic.png', 32, 32);
+            this.load.image('tiles', 'assets/pacman-tiles.png');
             this.load.tilemap('map', 'assets/pacman-map.json', null, Phaser.Tilemap.TILED_JSON);
 
 
@@ -108,6 +109,10 @@
             this.dots = this.add.physicsGroup();
 
             this.map.createFromTiles(1806, this.safetile, 'dot', this.layer, this.dots);
+
+            //power up
+            this.power_ups = this.add.physicsGroup();
+            this.map.createFromTiles(1810, this.safetile, 'power_up', this.layer, this.power_ups);
 
             //teleport
             this.tp1 = this.add.physicsGroup();
@@ -325,6 +330,14 @@
             this.dots.children[bonusPos].loadTexture('bonus');
         },
 
+        eatPowerup: function (pacman, power_up) {
+            power_up.kill();
+            // music.play();
+            score += 200;
+            scoreNum.text = score;
+
+        },
+
         Left2Right: function() {
     		this.pacman.destroy();
     		this.pacman = this.add.sprite((34 * 16) + 8, (15 * 16) + 8, 'pacman', 0);
@@ -440,6 +453,8 @@
 
             this.physics.arcade.collide(this.pacman, this.layer);
             this.physics.arcade.overlap(this.pacman, this.dots, this.eatDot, null, this);
+            this.physics.arcade.overlap(this.pacman, this.power_ups, this.eatPowerup, null, this);
+
 
             this.marker.x = this.math.snapToFloor(Math.floor(this.pacman.x), this.gridsize) / this.gridsize;
             this.marker.y = this.math.snapToFloor(Math.floor(this.pacman.y), this.gridsize) / this.gridsize;
