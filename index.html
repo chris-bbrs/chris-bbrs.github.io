@@ -288,9 +288,9 @@
 
         eatDot: function (pacman, dot) {
 
-            var audio = new Audio('assets/SonicRingSoundEffect.mp3');
-            audio.volume = 0.1;
-            audio.play();
+            var ring_sound = new Audio('assets/SonicRingSoundEffect.mp3');
+            ring_sound.volume = 0.1;
+            ring_sound.play();
 
             dot.kill();
 
@@ -302,8 +302,13 @@
             const bonusring = this.dots.getChildIndex(dot) == bonusPos;
 
             if (bonusring) {
-                score = score + 100;
+
+                var bonus_audio = new Audio('assets/bonus_sound.mp3');
+                bonus_audio.volume = 0.3;
+                bonus_audio.play();
+
                 this.eatBonus();
+                score = score + 100;
             }
             else {
                 score += 10;
