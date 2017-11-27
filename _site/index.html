@@ -22,7 +22,6 @@
 
     var game = new Phaser.Game(595, 520, Phaser.AUTO);
 
-    var s = 0;
     var score = 0;
     var scoreNum;
     var timeNum;
@@ -30,10 +29,16 @@
     var lifes = 3;
     var lifesNum;
     var bonusPos;
+
+    var s = 0;
     var enemySpeed = -90;
     var enemy2Speed = 110;
 	var enemyCollide;
 	var enemy2Collide;
+	var enemyKilled;
+	var enemy2Killed;
+
+	var powerUp_audio = new Audio('assets/Sonic-PowerUp.mp3');
 
     var Pacman = function (game) {
 
@@ -287,6 +292,9 @@
         },
 
         restart: function () {
+        	if (!powerUp_audio.paused) {
+        		powerUp_audio.pause();
+        	}
         	if (confirm("PLAY AGAIN?") == true) {
         	    window.location.reload();
         	} else{
@@ -334,13 +342,16 @@
         },
 
         eatPowerup: function (pacman, power_up) {
-            var powerUp_audio = new Audio('assets/Sonic-PowerUp.mp3');
             powerUp_audio.volume = 0.5;
-            if ( powerUp_time < parseInt(timeNum.text) ) {
-            	powerUp_audio.play();
-            	powerUp_time = parseInt(timeNum.text) + 5;
+            if ( powerUp_audio.paused  ) {
+	        	powerUp_audio.play();
+            }
+            else {
+            	powerUp_audio.currentTime = 0;
             }
 
+            enemyKilled = false;
+            enemy2Killed = false;
             power_up.kill();
         },
 
@@ -366,6 +377,13 @@
     		this.move(Phaser.RIGHT);
     	},
 
+    	sleep: function(miliseconds) {
+    	   var currentTime = new Date().getTime();
+
+    	   while (currentTime + miliseconds >= new Date().getTime()) {
+    	   }
+    	},
+
         update: function () {
             timeNum.text = Math.floor(this.game.time.totalElapsedSeconds());
 
@@ -382,10 +400,18 @@
 				enemy2Collide = false;
 			}
 			if ( enemyCollide || enemy2Collide ) {
-				if ( powerUp_time + 3.5 < parseInt(timeNum.text) ) {
+				if ( powerUp_audio.paused || (enemyCollide && enemyKilled ) || (enemy2Collide && enemy2Killed) ) {
 					if(lifes > 1) {
 			            lifes = lifes - 1;
 			            lifesNum.text = lifes;
+
+            			powerUp_audio.pause();
+
+            			var death_audio = new Audio('assets/sonic-death.mp3');
+                        death_audio.volume = 0.2;
+            			death_audio.play();
+
+            			alert("Lost one life");
 
 			            this.pacman.position.x = (14 * 16) + 8;
 			            this.pacman.position.y = (18 * 16) + 8;
@@ -398,6 +424,7 @@
 			            this.enemy2.position.x = (16 * 16) + 8;
 			            this.enemy2.position.y = (12 * 16) + 8;
 			            enemy2Speed = 110;
+
 			        }
 			        else {
 			        	if ( s == 0 ) {
@@ -410,22 +437,28 @@
 					score += 200;
 					scoreNum.text = score;
 
+					var killEnemy_audio = new Audio('assets/kill-enemy-audio.mp3');
+		            killEnemy_audio.volume = 0.8;
+					killEnemy_audio.play();
+
 					//enemy1
-					if( enemyCollide ) {
+					if( enemyCollide && enemyKilled == false) {
 					this.enemy.position.x = (15 * 16) + 8;
 			        this.enemy.position.y = (12 * 16) + 8;
+			        enemyKilled = true;
 			        this.move(this.current);
 			    	}
 			        //enemy2
-			    	if ( enemy2Collide ) {
+			    	if ( enemy2Collide && enemy2Killed == false) {
 			        this.enemy2.position.x = (16 * 16) + 8;
 			        this.enemy2.position.y = (12 * 16) + 8;
+			        enemy2Killed = true;
 			        this.move(this.current);
 			    	}
 			    }
 			}
 
-            //enemy1
+            //enemy1 movement
             this.enemy.scale.x = -1;
             if(this.enemy.angle == 0)
             {
@@ -455,7 +488,7 @@
             			this.enemy.angle = this.enemy.angle - 90;
             	}
             }
-            //enemy2
+            //enemy2 moement
             this.enemy2.scale.x = 1;
         	if(this.enemy2.angle == 0)
         	{

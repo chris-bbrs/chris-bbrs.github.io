@@ -292,7 +292,7 @@
         },
 
         restart: function () {
-        	if (powerUp_audio) {
+        	if (!powerUp_audio.paused) {
         		powerUp_audio.pause();
         	}
         	if (confirm("PLAY AGAIN?") == true) {
@@ -377,6 +377,13 @@
     		this.move(Phaser.RIGHT);
     	},
 
+    	sleep: function(miliseconds) {
+    	   var currentTime = new Date().getTime();
+
+    	   while (currentTime + miliseconds >= new Date().getTime()) {
+    	   }
+    	},
+
         update: function () {
             timeNum.text = Math.floor(this.game.time.totalElapsedSeconds());
 
@@ -398,6 +405,14 @@
 			            lifes = lifes - 1;
 			            lifesNum.text = lifes;
 
+            			powerUp_audio.pause();
+
+            			var death_audio = new Audio('assets/sonic-death.mp3');
+                        death_audio.volume = 0.2;
+            			death_audio.play();
+
+            			alert("Lost one life");
+
 			            this.pacman.position.x = (14 * 16) + 8;
 			            this.pacman.position.y = (18 * 16) + 8;
 			    		this.move(Phaser.LEFT);
@@ -409,6 +424,7 @@
 			            this.enemy2.position.x = (16 * 16) + 8;
 			            this.enemy2.position.y = (12 * 16) + 8;
 			            enemy2Speed = 110;
+
 			        }
 			        else {
 			        	if ( s == 0 ) {
