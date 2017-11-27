@@ -25,7 +25,6 @@
     var score = 0;
     var scoreNum;
     var timeNum;
-    var powerUp_time = -3.5;
     var lifes = 3;
     var lifesNum;
     var bonusPos;
@@ -377,13 +376,6 @@
     		this.move(Phaser.RIGHT);
     	},
 
-    	sleep: function(miliseconds) {
-    	   var currentTime = new Date().getTime();
-
-    	   while (currentTime + miliseconds >= new Date().getTime()) {
-    	   }
-    	},
-
         update: function () {
             timeNum.text = Math.floor(this.game.time.totalElapsedSeconds());
 
@@ -407,10 +399,6 @@
 
             			powerUp_audio.pause();
 
-            			var death_audio = new Audio('assets/sonic-death.mp3');
-                        death_audio.volume = 0.2;
-            			death_audio.play();
-
             			alert("Lost one life");
 
 			            this.pacman.position.x = (14 * 16) + 8;
@@ -419,17 +407,23 @@
 			    		//enemy1
 			    		this.enemy.position.x = (15 * 16) + 8;
 			            this.enemy.position.y = (12 * 16) + 8;
-			            enemySpeed = -90;
 			            //enemy2
 			            this.enemy2.position.x = (16 * 16) + 8;
 			            this.enemy2.position.y = (12 * 16) + 8;
-			            enemy2Speed = 110;
 
 			        }
 			        else {
 			        	if ( s == 0 ) {
-								this.restart();
-								s++;
+							this.text = game.add.text((8 * 16) + 8, (7 * 16) + 8, "GAME OVER", { font: "40px Arial", fill: "#ffff00"});
+							this.text = game.add.text((7 * 16) + 8, (19 * 16) + 8, " TO PLAY AGAIN PRESS F5	", { font: "21px Arial", fill: "#ffff00"});
+
+							this.speed = 0;
+							enemySpeed = 0;
+							enemy2Speed = 0;
+
+							timeNum = 0;
+
+							s++;
 							}
 			        }
 				}
