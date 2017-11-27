@@ -22,7 +22,6 @@
 
     var game = new Phaser.Game(595, 520, Phaser.AUTO);
 
-    var s = 0;
     var score = 0;
     var scoreNum;
     var timeNum;
@@ -30,10 +29,14 @@
     var lifes = 3;
     var lifesNum;
     var bonusPos;
+
+    var s = 0;
     var enemySpeed = -90;
     var enemy2Speed = 110;
 	var enemyCollide;
 	var enemy2Collide;
+	var enemyKilled;
+	var enemy2Killed;
 
     var Pacman = function (game) {
 
@@ -341,6 +344,8 @@
             	powerUp_time = parseInt(timeNum.text) + 5;
             }
 
+            enemyKilled = false;
+            enemy2Killed = false;
             power_up.kill();
         },
 
@@ -382,7 +387,7 @@
 				enemy2Collide = false;
 			}
 			if ( enemyCollide || enemy2Collide ) {
-				if ( powerUp_time + 3.5 < parseInt(timeNum.text) ) {
+				if ( powerUp_time + 3.5 < parseInt(timeNum.text) || enemyKilled == true || enemy2Killed == true ) {
 					if(lifes > 1) {
 			            lifes = lifes - 1;
 			            lifesNum.text = lifes;
@@ -411,21 +416,23 @@
 					scoreNum.text = score;
 
 					//enemy1
-					if( enemyCollide ) {
+					if( enemyCollide && enemyKilled == false) {
 					this.enemy.position.x = (15 * 16) + 8;
 			        this.enemy.position.y = (12 * 16) + 8;
+			        enemyKilled = true;
 			        this.move(this.current);
 			    	}
 			        //enemy2
-			    	if ( enemy2Collide ) {
+			    	if ( enemy2Collide && enemy2Killed == false) {
 			        this.enemy2.position.x = (16 * 16) + 8;
 			        this.enemy2.position.y = (12 * 16) + 8;
+			        enemy2Killed = true;
 			        this.move(this.current);
 			    	}
 			    }
 			}
 
-            //enemy1
+            //enemy1 movement
             this.enemy.scale.x = -1;
             if(this.enemy.angle == 0)
             {
@@ -455,7 +462,7 @@
             			this.enemy.angle = this.enemy.angle - 90;
             	}
             }
-            //enemy2
+            //enemy2 moement
             this.enemy2.scale.x = 1;
         	if(this.enemy2.angle == 0)
         	{
