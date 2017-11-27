@@ -387,7 +387,7 @@
 				enemy2Collide = false;
 			}
 			if ( enemyCollide || enemy2Collide ) {
-				if ( powerUp_time + 3.5 < parseInt(timeNum.text) || enemyKilled == true || enemy2Killed == true ) {
+				if ( powerUp_time + 3.5 < parseInt(timeNum.text) || (enemyCollide && enemyKilled ) || (enemy2Collide && enemy2Killed) ) {
 					if(lifes > 1) {
 			            lifes = lifes - 1;
 			            lifesNum.text = lifes;
