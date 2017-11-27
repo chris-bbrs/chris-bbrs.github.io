@@ -38,6 +38,8 @@
 	var enemyKilled;
 	var enemy2Killed;
 
+	var powerUp_audio = new Audio('assets/Sonic-PowerUp.mp3');
+
     var Pacman = function (game) {
 
         this.map = null;
@@ -290,6 +292,9 @@
         },
 
         restart: function () {
+        	if (powerUp_audio) {
+        		powerUp_audio.pause();
+        	}
         	if (confirm("PLAY AGAIN?") == true) {
         	    window.location.reload();
         	} else{
@@ -337,11 +342,12 @@
         },
 
         eatPowerup: function (pacman, power_up) {
-            var powerUp_audio = new Audio('assets/Sonic-PowerUp.mp3');
             powerUp_audio.volume = 0.5;
-            if ( powerUp_time < parseInt(timeNum.text) ) {
-            	powerUp_audio.play();
-            	powerUp_time = parseInt(timeNum.text) + 5;
+            if ( powerUp_audio.paused  ) {
+	        	powerUp_audio.play();
+            }
+            else {
+            	powerUp_audio.currentTime = 0;
             }
 
             enemyKilled = false;
@@ -387,7 +393,7 @@
 				enemy2Collide = false;
 			}
 			if ( enemyCollide || enemy2Collide ) {
-				if ( powerUp_time + 3.5 < parseInt(timeNum.text) || (enemyCollide && enemyKilled ) || (enemy2Collide && enemy2Killed) ) {
+				if ( powerUp_audio.paused || (enemyCollide && enemyKilled ) || (enemy2Collide && enemy2Killed) ) {
 					if(lifes > 1) {
 			            lifes = lifes - 1;
 			            lifesNum.text = lifes;
@@ -414,6 +420,10 @@
 				else {
 					score += 200;
 					scoreNum.text = score;
+
+					var killEnemy_audio = new Audio('assets/kill-enemy-audio.mp3');
+		            killEnemy_audio.volume = 0.8;
+					killEnemy_audio.play();
 
 					//enemy1
 					if( enemyCollide && enemyKilled == false) {
