@@ -89,6 +89,7 @@
             //this.load.crossOrigin = 'anonymous';
 
             this.load.image('gameOver', 'assets/gameOver.png');
+            this.load.image('win', 'assets/youWin.png');
             this.load.image('dot', 'assets/ring.png');
             this.load.image('life', 'assets/life.png');
             this.load.image('bonus', 'assets/ring_bonus.png');
@@ -312,7 +313,21 @@
 
             if (this.dots.total === 1)
             {
-                this.restart();
+                this.win = game.add.sprite( (3 * 16) , (9 * 16) + 15, 'win');
+
+                this.text = game.add.text((7 * 16) + 8, (19 * 16) + 5, " TO PLAY AGAIN PRESS F5 ", { font: "21px Arial", fill: "#ffff00"});
+
+                powerUp_audio.pause();
+                var win_audio = new Audio('assets/winning_audio.mp3');
+                win_audio.volume = 0.6;
+                win_audio.play();
+
+                this.speed = 0;
+                enemySpeed = 0;
+                enemy2Speed = 0;
+
+                timeNum = 0;
+
             }
 
             const bonusring = this.dots.getChildIndex(dot) == bonusPos;
@@ -399,6 +414,7 @@
 			            lifesNum.text = lifes;
 
             			powerUp_audio.pause();
+                        powerUp_audio.currentTime = 0;
 
             			alert("Lost one life");
 
