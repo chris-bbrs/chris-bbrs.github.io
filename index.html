@@ -88,6 +88,7 @@
             //this.load.baseURL = 'https://cnobody.github.io/pacman/';
             //this.load.crossOrigin = 'anonymous';
 
+            this.load.image('gameOver', 'assets/gameOver.png');
             this.load.image('dot', 'assets/ring.png');
             this.load.image('life', 'assets/life.png');
             this.load.image('bonus', 'assets/ring_bonus.png');
@@ -414,10 +415,16 @@
 			        }
 			        else {
 			        	if ( s == 0 ) {
-							this.text = game.add.text((8 * 16) + 8, (7 * 16) + 8, "GAME OVER", { font: "40px Arial", fill: "#ffff00"});
-							this.text = game.add.text((7 * 16) + 8, (19 * 16) + 8, " TO PLAY AGAIN PRESS F5	", { font: "21px Arial", fill: "#ffff00"});
+							this.GameOver = game.add.sprite( (4 * 16) + 3, (7 * 16) + 8, 'gameOver');
 
-							this.speed = 0;
+							this.text = game.add.text((7 * 16) + 8, (19 * 16) + 5, " TO PLAY AGAIN PRESS F5	", { font: "21px Arial", fill: "#ffff00"});
+
+							powerUp_audio.pause();
+                            var gameOver_audio = new Audio('assets/GameOver.mp3');
+                            gameOver_audio.volume = 0.6;
+                            gameOver_audio.play();
+
+                            this.speed = 0;
 							enemySpeed = 0;
 							enemy2Speed = 0;
 
