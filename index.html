@@ -23,6 +23,7 @@
     var game = new Phaser.Game(595, 520, Phaser.AUTO);
 
     var score = 0;
+    var timeScore = 0;
     var scoreNum;
     var timeNum;
     var lifes = 3;
@@ -176,6 +177,8 @@
 
             this.eatBonus();
 
+            setInterval(function(){ timeScore = timeScore + 25; }, 1000);
+
         },
 
         checkKeys: function () {
@@ -313,7 +316,7 @@
 
             if (this.dots.total === 1)
             {
-                this.win = game.add.sprite( (3 * 16) , (9 * 16) + 15, 'win');
+                this.win = game.add.sprite( (3 * 16) - 2, (9 * 16) + 14, 'win');
 
                 this.text = game.add.text((7 * 16) + 8, (19 * 16) + 5, " TO PLAY AGAIN PRESS F5 ", { font: "21px Arial", fill: "#ffff00"});
 
@@ -328,6 +331,9 @@
 
                 timeNum = 0;
 
+                score = score - timeScore;
+                if ( score < 0) {score = 0;}
+                scoreNum.text = score;
             }
 
             const bonusring = this.dots.getChildIndex(dot) == bonusPos;
