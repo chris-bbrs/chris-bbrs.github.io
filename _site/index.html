@@ -23,6 +23,7 @@
     var game = new Phaser.Game(595, 520, Phaser.AUTO);
 
     var score = 0;
+    var timeScore = 0;
     var scoreNum;
     var timeNum;
     var lifes = 3;
@@ -30,8 +31,8 @@
     var bonusPos;
 
     var s = 0;
-    var enemySpeed = -90;
-    var enemy2Speed = 110;
+    var enemySpeed = 100;
+    var enemy2Speed = 120;
 	var enemyCollide;
 	var enemy2Collide;
 	var enemyKilled;
@@ -53,7 +54,7 @@
         this.safetile = 1868;
         this.gridsize = 16;
 
-        this.speed = 150;
+        this.speed = 145;
         this.threshold = 3;
 
         this.marker = new Phaser.Point();
@@ -176,6 +177,28 @@
 
             this.eatBonus();
 
+            setInterval(function(){ timeScore = timeScore + 25; }, 1000);
+
+            setTimeout(function() {
+                enemySpeed = 115;
+            }, 10000);
+            setTimeout(function() {
+                enemySpeed = 125;
+            }, 20000);
+            setTimeout(function() {
+                enemySpeed = 140;
+            }, 30000);
+
+            setTimeout(function() {
+                enemy2Speed = 135;
+            }, 20000);
+            setTimeout(function() {
+                enemy2Speed = 150;
+            }, 30000);
+            setTimeout(function() {
+                enemy2Speed = 160;
+            }, 40000);
+
         },
 
         checkKeys: function () {
@@ -292,17 +315,6 @@
 
         },
 
-        restart: function () {
-        	if (!powerUp_audio.paused) {
-        		powerUp_audio.pause();
-        	}
-        	if (confirm("PLAY AGAIN?") == true) {
-        	    window.location.reload();
-        	} else{
-        	    close();
-        	}
-        },
-
         eatDot: function (pacman, dot) {
 
             var ring_sound = new Audio('assets/SonicRingSoundEffect.mp3');
@@ -313,7 +325,7 @@
 
             if (this.dots.total === 1)
             {
-                this.win = game.add.sprite( (3 * 16) , (9 * 16) + 15, 'win');
+                this.win = game.add.sprite( (3 * 16) - 2, (9 * 16) + 14, 'win');
 
                 this.text = game.add.text((7 * 16) + 8, (19 * 16) + 5, " TO PLAY AGAIN PRESS F5 ", { font: "21px Arial", fill: "#ffff00"});
 
@@ -328,6 +340,9 @@
 
                 timeNum = 0;
 
+                score = score - timeScore;
+                if ( score < 0) {score = 0;}
+                scoreNum.text = score;
             }
 
             const bonusring = this.dots.getChildIndex(dot) == bonusPos;
@@ -413,6 +428,13 @@
 			            lifes = lifes - 1;
 			            lifesNum.text = lifes;
 
+                        if (score > 500 ) {
+                            score = score - 500;
+                        }else {
+                            score = 0;
+                        }
+                        scoreNum.text = score;
+
             			powerUp_audio.pause();
                         powerUp_audio.currentTime = 0;
 
@@ -476,7 +498,7 @@
 			}
 
             //enemy1 movement
-            this.enemy.scale.x = -1;
+            this.enemy.scale.x = 1;
             if(this.enemy.angle == 0)
             {
             	this.enemy.body.velocity.x = enemySpeed;
