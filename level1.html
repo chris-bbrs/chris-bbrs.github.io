@@ -89,6 +89,7 @@
             //this.load.baseURL = 'https://cnobody.github.io/pacman/';
             //this.load.crossOrigin = 'anonymous';
 
+            this.load.spritesheet('button', 'assets/Continue-Button.png', 150, 56);
             this.load.image('gameOver', 'assets/gameOver.png');
             this.load.image('win', 'assets/youWin.png');
             this.load.image('dot', 'assets/ring.png');
@@ -316,9 +317,9 @@
 
             if (this.dots.total === 1)
             {
-                this.win = game.add.sprite( (3 * 16) - 2, (9 * 16) + 14, 'win');
+                this.win = game.add.sprite( (3 * 16) - 2, (9 * 16) + 10, 'win');
 
-                this.text = game.add.text((7 * 16) + 8, (19 * 16) + 5, " TO PLAY AGAIN PRESS F5 ", { font: "21px Arial", fill: "#ffff00"});
+                this.button = game.add.button((10 * 16) -2, (18 * 16), 'button', this.actionOnClick, this, 2, 1, 0);
 
                 powerUp_audio.pause();
                 var win_audio = new Audio('assets/winning_audio.mp3');
@@ -398,6 +399,12 @@
     		this.move(Phaser.RIGHT);
     	},
 
+        actionOnClick: function() {
+
+            location.href = "http://127.0.0.1:4000/level2.html";
+
+        },
+
         update: function () {
             timeNum.text = Math.floor(this.game.time.totalElapsedSeconds());
 
@@ -439,7 +446,7 @@
 			        	if ( s == 0 ) {
 							this.GameOver = game.add.sprite( (4 * 16) + 3, (7 * 16) + 8, 'gameOver');
 
-							this.text = game.add.text((7 * 16) + 8, (19 * 16) + 5, " TO PLAY AGAIN PRESS F5	", { font: "21px Arial", fill: "#ffff00"});
+							this.text = game.add.text((7 * 16) + 8, (19 * 16) + 5, " TO PLAY AGAIN PRESS F5  ", { font: "21px Arial", fill: "#ffff00"});
 
 							powerUp_audio.pause();
                             var gameOver_audio = new Audio('assets/GameOver.mp3');
