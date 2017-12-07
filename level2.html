@@ -33,10 +33,13 @@
     var s = 0;
     var enemySpeed = 100;
     var enemy2Speed = 120;
+    var enemy3Speed = 130;
 	var enemyCollide;
 	var enemy2Collide;
+    var enemy3Collide;
 	var enemyKilled;
 	var enemy2Killed;
+    var enemy3Killed;
 
 	var powerUp_audio = new Audio('assets/Sonic-PowerUp.mp3');
 
@@ -98,6 +101,7 @@
             this.load.image('power_up', 'assets/power_up.png');
             this.load.spritesheet('enemy', 'assets/enemy.png', 32, 32);
             this.load.spritesheet('enemy2', 'assets/enemy2.png', 32, 32);
+            this.load.spritesheet('enemy3', 'assets/enemy3.png', 40, 34);
             this.load.spritesheet('pacman', 'assets/sonic.png', 32, 32);
             this.load.image('tiles', 'assets/pacman-tiles.png');
             this.load.tilemap('map', 'assets/pacman-map.json', null, Phaser.Tilemap.TILED_JSON);
@@ -146,7 +150,7 @@
             this.pacman.body.setSize(16, 16, 0, 0);
 
             //enemy1
-            this.enemy = this.add.sprite((15 * 16) + 8, (12 * 16) + 8, 'enemy', 0);
+            this.enemy = this.add.sprite((14 * 16) + 8, (12 * 16) + 8, 'enemy', 0);
             this.enemy.anchor.set(0.5);
             this.enemy.animations.add('munch', [0, 1, 2, 1], 20, true);
             this.physics.arcade.enable(this.enemy);
@@ -157,11 +161,18 @@
             this.enemy2.animations.add('munch', [0, 1, 2, 1], 20, true);
             this.physics.arcade.enable(this.enemy2);
             this.enemy2.body.setSize(16, 16, 0, 0);
+            //enemy3
+            this.enemy3 = this.add.sprite((15 * 16) + 8, (12 * 16) + 8, 'enemy3', 0);
+            this.enemy3.anchor.set(0.5);
+            this.enemy3.animations.add('munch', [0, 1, 2, 1], 20, true);
+            this.physics.arcade.enable(this.enemy3);
+            this.enemy3.body.setSize(16, 16, 0, 0);
 
             this.cursors = this.input.keyboard.createCursorKeys();
 
             this.enemy.play('munch');
             this.enemy2.play('munch');
+            this.enemy3.play('munch');
             this.pacman.play('munch');
             this.move(Phaser.LEFT);
 
@@ -337,6 +348,7 @@
                 this.speed = 0;
                 enemySpeed = 0;
                 enemy2Speed = 0;
+                enemy3Speed = 0;
 
                 timeNum = 0;
 
@@ -382,6 +394,7 @@
 
             enemyKilled = false;
             enemy2Killed = false;
+            enemy3Killed = false;
             power_up.kill();
         },
 
@@ -422,8 +435,14 @@
 			}else {
 				enemy2Collide = false;
 			}
-			if ( enemyCollide || enemy2Collide ) {
-				if ( powerUp_audio.paused || (enemyCollide && enemyKilled ) || (enemy2Collide && enemy2Killed) ) {
+            if (this.physics.arcade.collide(this.pacman, this.enemy3) ) {
+                enemy3Collide = true;
+            }else {
+                enemy3Collide = false;
+            }
+
+			if ( enemyCollide || enemy2Collide || enemy3Collide ) {
+				if ( powerUp_audio.paused || (enemyCollide && enemyKilled ) || (enemy2Collide && enemy2Killed) || (enemy3Collide && enemy3Killed ) ) {
 					if(lifes > 1) {
 			            lifes = lifes - 1;
 			            lifesNum.text = lifes;
@@ -444,11 +463,15 @@
 			            this.pacman.position.y = (18 * 16) + 8;
 			    		this.move(Phaser.LEFT);
 			    		//enemy1
-			    		this.enemy.position.x = (15 * 16) + 8;
+			    		this.enemy.position.x = (14 * 16) + 8;
 			            this.enemy.position.y = (12 * 16) + 8;
 			            //enemy2
 			            this.enemy2.position.x = (16 * 16) + 8;
 			            this.enemy2.position.y = (12 * 16) + 8;
+                        //enemy3
+                        this.enemy3.position.x = (15 * 16) + 8;
+                        this.enemy3.position.y = (12 * 16) + 8;
+
 
 			        }
 			        else {
@@ -465,6 +488,7 @@
                             this.speed = 0;
 							enemySpeed = 0;
 							enemy2Speed = 0;
+                            enemy3Speed = 0;
 
 							timeNum = 0;
 
@@ -482,7 +506,7 @@
 
 					//enemy1
 					if( enemyCollide && enemyKilled == false) {
-					this.enemy.position.x = (15 * 16) + 8;
+					this.enemy.position.x = (14 * 16) + 8;
 			        this.enemy.position.y = (12 * 16) + 8;
 			        enemyKilled = true;
 			        this.move(this.current);
@@ -494,6 +518,13 @@
 			        enemy2Killed = true;
 			        this.move(this.current);
 			    	}
+                    //enemy3
+                    if ( enemy3Collide && enemy3Killed == false) {
+                    this.enemy3.position.x = (15 * 16) + 8;
+                    this.enemy3.position.y = (12 * 16) + 8;
+                    enemy3Killed = true;
+                    this.move(this.current);
+                    }
 			    }
 			}
 
@@ -557,6 +588,36 @@
         			this.enemy2.angle = this.enemy2.angle - 90;
         		}
         	}
+            //enemy3 movement
+            this.enemy3.scale.x = 1;
+            if(this.enemy3.angle == 0)
+            {
+                this.enemy3.body.velocity.x = enemy3Speed;
+            }
+            if(this.enemy3.angle == -180)
+            {
+                this.enemy3.body.velocity.x = -enemy3Speed;
+            }
+            if(this.enemy3.angle == 90)
+            {
+                this.enemy3.body.velocity.y = enemy3Speed;
+            }
+            if(this.enemy3.angle == -90)
+            {
+                this.enemy3.body.velocity.y = -enemy3Speed;
+            }
+            if(this.physics.arcade.collide(this.enemy3, this.layer))
+            {
+                randomVar = Math.floor((Math.random() * 2) + 1);
+                if(randomVar == 1)
+                {
+                    this.enemy3.angle = this.enemy3.angle + 90;
+                }
+                else
+                {
+                        this.enemy3.angle = this.enemy3.angle - 90;
+                }
+            }
 
             this.physics.arcade.collide(this.pacman, this.layer);
             this.physics.arcade.overlap(this.pacman, this.dots, this.eatDot, null, this);
