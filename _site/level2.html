@@ -33,7 +33,7 @@
     var s = 0;
     var enemySpeed = 100;
     var enemy2Speed = 120;
-    var enemy3Speed = 130;
+    var enemy3Speed = -130;
 	var enemyCollide;
 	var enemy2Collide;
     var enemy3Collide;
@@ -104,7 +104,7 @@
             this.load.spritesheet('enemy3', 'assets/enemy3.png', 40, 34);
             this.load.spritesheet('pacman', 'assets/sonic.png', 32, 32);
             this.load.image('tiles', 'assets/pacman-tiles.png');
-            this.load.tilemap('map', 'assets/pacman-map.json', null, Phaser.Tilemap.TILED_JSON);
+            this.load.tilemap('map', 'assets/pacman-map2.json', null, Phaser.Tilemap.TILED_JSON);
 
 
             //  Needless to say, graphics (C)opyright Namco
@@ -142,7 +142,7 @@
             this.map.setCollisionByExclusion([this.safetile], true, this.layer);
 
             //  Position Pacman at grid location 14x17 (the +8 accounts for his anchor)
-            this.pacman = this.add.sprite((14 * 16) + 8, (18 * 16) + 8, 'pacman', 0);
+            this.pacman = this.add.sprite((17 * 16) + 8, (25 * 16) + 8, 'pacman', 0);
             this.pacman.anchor.set(0.5);
             this.pacman.animations.add('munch', [0, 1, 2, 1], 20, true);
 
@@ -150,19 +150,19 @@
             this.pacman.body.setSize(16, 16, 0, 0);
 
             //enemy1
-            this.enemy = this.add.sprite((14 * 16) + 8, (12 * 16) + 8, 'enemy', 0);
+            this.enemy = this.add.sprite((14 * 16) + 8, (19 * 16) + 8, 'enemy', 0);
             this.enemy.anchor.set(0.5);
             this.enemy.animations.add('munch', [0, 1, 2, 1], 20, true);
             this.physics.arcade.enable(this.enemy);
             this.enemy.body.setSize(16, 16, 0, 0);
             //enemy2
-            this.enemy2 = this.add.sprite((16 * 16) + 8, (12 * 16) + 8, 'enemy2', 0);
+            this.enemy2 = this.add.sprite((18 * 16) + 8, (19 * 16) + 8, 'enemy2', 0);
             this.enemy2.anchor.set(0.5);
             this.enemy2.animations.add('munch', [0, 1, 2, 1], 20, true);
             this.physics.arcade.enable(this.enemy2);
             this.enemy2.body.setSize(16, 16, 0, 0);
             //enemy3
-            this.enemy3 = this.add.sprite((15 * 16) + 8, (12 * 16) + 8, 'enemy3', 0);
+            this.enemy3 = this.add.sprite((16 * 16) + 8, (19 * 16) + 8, 'enemy3', 0);
             this.enemy3.anchor.set(0.5);
             this.enemy3.animations.add('munch', [0, 1, 2, 1], 20, true);
             this.physics.arcade.enable(this.enemy3);
@@ -208,6 +208,16 @@
             }, 30000);
             setTimeout(function() {
                 enemy2Speed = 160;
+            }, 40000);
+
+            setTimeout(function() {
+                enemy3Speed = 150;
+            }, 20000);
+            setTimeout(function() {
+                enemy3Speed = 160;
+            }, 30000);
+            setTimeout(function() {
+                enemy3Speed = 170;
             }, 40000);
 
         },
@@ -400,7 +410,7 @@
 
         Left2Right: function() {
     		this.pacman.destroy();
-    		this.pacman = this.add.sprite((34 * 16) + 8, (15 * 16) + 8, 'pacman', 0);
+    		this.pacman = this.add.sprite((34 * 16) + 8, (22 * 16) + 8, 'pacman', 0);
     		this.pacman.anchor.set(0.5);
     		this.pacman.animations.add('munch', [0, 1, 2, 1], 20, true);
     		this.physics.arcade.enable(this.pacman);
@@ -411,7 +421,7 @@
 
     	Right2Left: function() {
     		this.pacman.destroy();
-    		this.pacman = this.add.sprite((2 * 16) + 8, (15 * 16) + 8, 'pacman', 0);
+    		this.pacman = this.add.sprite((2 * 16) + 8, (22 * 16) + 8, 'pacman', 0);
     		this.pacman.anchor.set(0.5);
     		this.pacman.animations.add('munch', [0, 1, 2, 1], 20, true);
     		this.physics.arcade.enable(this.pacman);
@@ -459,18 +469,18 @@
 
             			alert("Lost one life");
 
-			            this.pacman.position.x = (14 * 16) + 8;
-			            this.pacman.position.y = (18 * 16) + 8;
+			            this.pacman.position.x = (17 * 16) + 8;
+			            this.pacman.position.y = (25 * 16) + 8;
 			    		this.move(Phaser.LEFT);
 			    		//enemy1
 			    		this.enemy.position.x = (14 * 16) + 8;
-			            this.enemy.position.y = (12 * 16) + 8;
+			            this.enemy.position.y = (19 * 16) + 8;
 			            //enemy2
-			            this.enemy2.position.x = (16 * 16) + 8;
-			            this.enemy2.position.y = (12 * 16) + 8;
+			            this.enemy2.position.x = (18 * 16) + 8;
+			            this.enemy2.position.y = (19 * 16) + 8;
                         //enemy3
-                        this.enemy3.position.x = (15 * 16) + 8;
-                        this.enemy3.position.y = (12 * 16) + 8;
+                        this.enemy3.position.x = (16 * 16) + 8;
+                        this.enemy3.position.y = (19 * 16) + 8;
 
 
 			        }
@@ -507,21 +517,21 @@
 					//enemy1
 					if( enemyCollide && enemyKilled == false) {
 					this.enemy.position.x = (14 * 16) + 8;
-			        this.enemy.position.y = (12 * 16) + 8;
+			        this.enemy.position.y = (19 * 16) + 8;
 			        enemyKilled = true;
 			        this.move(this.current);
 			    	}
 			        //enemy2
 			    	if ( enemy2Collide && enemy2Killed == false) {
-			        this.enemy2.position.x = (16 * 16) + 8;
-			        this.enemy2.position.y = (12 * 16) + 8;
+			        this.enemy2.position.x = (18 * 16) + 8;
+			        this.enemy2.position.y = (19 * 16) + 8;
 			        enemy2Killed = true;
 			        this.move(this.current);
 			    	}
                     //enemy3
                     if ( enemy3Collide && enemy3Killed == false) {
-                    this.enemy3.position.x = (15 * 16) + 8;
-                    this.enemy3.position.y = (12 * 16) + 8;
+                    this.enemy3.position.x = (16 * 16) + 8;
+                    this.enemy3.position.y = (19 * 16) + 8;
                     enemy3Killed = true;
                     this.move(this.current);
                     }
