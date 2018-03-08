@@ -54,7 +54,7 @@
         this.safetile = 1868;
         this.gridsize = 16;
 
-        this.speed = 130;
+        this.speed = 150;
         this.threshold = 3;
 
         this.marker = new Phaser.Point();
@@ -317,6 +317,8 @@
             if (this.dots.total === 1)
             {
                 this.win = game.add.sprite( (3 * 16) - 2, (9 * 16) + 10, 'win');
+
+                this.text = game.add.text((7 * 16) + 8, (19 * 16) + 5, " TO PLAY AGAIN PRESS F5  ", { font: "21px Arial", fill: "#ffff00" });
 
                 powerUp_audio.pause();
                 var win_audio = new Audio('assets/winning_audio.mp3');
