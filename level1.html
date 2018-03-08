@@ -31,8 +31,8 @@
     var bonusPos;
 
     var s = 0;
-    var enemySpeed = -90;
-    var enemy2Speed = 110;
+    var enemySpeed = -100;
+    var enemy2Speed = 120;
 	var enemyCollide;
 	var enemy2Collide;
 	var enemyKilled;
@@ -54,7 +54,7 @@
         this.safetile = 1868;
         this.gridsize = 16;
 
-        this.speed = 150;
+        this.speed = 130;
         this.threshold = 3;
 
         this.marker = new Phaser.Point();
@@ -89,7 +89,6 @@
             //this.load.baseURL = 'https://cnobody.github.io/pacman/';
             //this.load.crossOrigin = 'anonymous';
 
-            this.load.spritesheet('button', 'assets/Continue-Button.png', 150, 56);
             this.load.image('gameOver', 'assets/gameOver.png');
             this.load.image('win', 'assets/youWin.png');
             this.load.image('dot', 'assets/ring.png');
@@ -319,8 +318,6 @@
             {
                 this.win = game.add.sprite( (3 * 16) - 2, (9 * 16) + 10, 'win');
 
-                this.button = game.add.button((10 * 16) -2, (18 * 16), 'button', this.actionOnClick, this, 2, 1, 0);
-
                 powerUp_audio.pause();
                 var win_audio = new Audio('assets/winning_audio.mp3');
                 win_audio.volume = 0.6;
@@ -399,11 +396,6 @@
     		this.move(Phaser.RIGHT);
     	},
 
-        actionOnClick: function() {
-
-            location.href = "http://127.0.0.1:4000/level2.html";
-
-        },
 
         update: function () {
             timeNum.text = Math.floor(this.game.time.totalElapsedSeconds());
@@ -518,7 +510,7 @@
             			this.enemy.angle = this.enemy.angle - 90;
             	}
             }
-            //enemy2 moement
+            //enemy2 movement
             this.enemy2.scale.x = 1;
         	if(this.enemy2.angle == 0)
         	{
