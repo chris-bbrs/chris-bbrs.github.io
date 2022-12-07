@@ -1,7 +1,5 @@
 ## Pacman-Sonic-Version
 
-**[Link Παιχνιδιού](https://cnobody.github.io/Pacman-Sonic-Version/menu.html)**
-
 ### 1o παραδοτέο :
 
  - [x] Έγινε επιλογή του θέματος της εργασίες και επιλέχθηκε το παιχνίδι Pacman 
